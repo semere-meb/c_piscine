@@ -1,1 +1,1 @@
-id -nG semere | tr " " ","
+id -nG $FT_USER | tr " " ","
