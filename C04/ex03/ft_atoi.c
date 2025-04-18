@@ -13,21 +13,16 @@ int	ft_atoi(char *str)
 	ret = 0;
 	mul = 1;
 	while (is_space(*str))
-	{
 		str++;
-	}
 	while (*str == '+' || *str == '-')
 	{
 		if (*str == '-')
-		{
 			mul *= -1;
-		}
 		str++;
 	}
 	while (*str >= '0' && *str <= '9')
 	{
-		ret *= 10;
-		ret += *str - '0';
+		ret = ret * 10 + (*str - '0');
 		str++;
 	}
 	return (ret * mul);
