@@ -1,7 +1,7 @@
 #include <alloca.h>
 #include <stdlib.h>
 
-int is_char_member(char c, const char *str) {
+int is_delimiter(char c, const char *str) {
     int i;
 
     i = 0;
@@ -37,7 +37,7 @@ int allocate(const char *str, const char *charset, char **array) {
     i = 0;
     start = -1;
     while (str[i]) {
-        if (!is_char_member(str[i], charset)) {
+        if (!is_delimiter(str[i], charset)) {
             if (start == -1)
                 start = i;
         } else if (start != -1) {
@@ -60,7 +60,7 @@ int array_len(const char *str, const char *charset) {
     i = 0;
     start = -1;
     while (str[i]) {
-        if (!is_char_member(str[i], charset)) {
+        if (!is_delimiter(str[i], charset)) {
             if (start == -1)
                 start = i;
         } else if (start != -1) {
