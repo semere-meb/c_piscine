@@ -7,7 +7,10 @@ INC_DIR = includes
 SRC_DIR = srcs
 
 # source and object files
-SRC_FILES = ft_putchar.c ft_swap.c ft_putstr.c ft_strlen.c ft_strcmp.c
+SRC_FILES = ft_putchar.c \
+			ft_swap.c ft_putstr.c \
+			ft_strlen.c \
+			ft_strcmp.c
 SRCS = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJS = $(SRCS:.c=.o)
 
@@ -15,14 +18,14 @@ OBJS = $(SRCS:.c=.o)
 HEADER= $(INC_DIR)/ft.h
 
 # library name
-LIBNAME = libft.a
+NAME = libft.a
 
 # Default: builds lib
-all: $(LIBNAME)
+all: $(NAME)
 
 # build lib rule
-$(LIBNAME): $(OBJS)
-	ar rcs $(LIBNAME) $(OBJS)
+$(NAME): $(OBJS)
+	/bin/ar rcs $(NAME) $(OBJS)
 
 # compile sources to objects
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER)
@@ -30,12 +33,12 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER)
 
 # clean objetc/temp files
 clean:
-	rm -f $(OBJS)
+	/bin/rm -f $(OBJS)
 
 
 # clean object files and library
 fclean: clean
-	rm -f $(LIBNAME)
+	/bin/rm -f $(NAME)
 
 # rebuild everything
 re: fclean all
