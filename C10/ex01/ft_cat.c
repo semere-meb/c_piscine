@@ -4,6 +4,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#define BUFF_SIZE 30000
+
 int	ft_strlen(char *str)
 {
 	int	len;
@@ -14,32 +16,28 @@ int	ft_strlen(char *str)
 	return (len);
 }
 
-void	ft_print_str(char *str, int bytes)
-{
-	int	i;
-
-	i = 0;
-	while (i < bytes)
-		write(1, &str[i++], 1);
-}
-
 int	ft_display_file(int fd)
 {
-	int		buf_size;
-	char	buf[buf_size];
+	char	buf[BUFF_SIZE];
 	int		bytes_read;
+	int		ret_code;
 
-	buf_size = 30000;
-	while ((bytes_read = read(fd, buf, buf_size)) > 0)
+	bytes_read = 1;
+	ret_code = 0;
+	while (bytes_read > 0)
 	{
-		ft_print_str(buf, bytes_read);
+		bytes_read = read(fd, buf, BUFF_SIZE);
+		if (bytes_read > 0)
+			write(1, buf, bytes_read);
+		else
+			ret_code = close(fd);
 	}
-	return (bytes_read);
+	return (ret_code);
 }
 
 void	print_error(char *prog_name, char *file_name)
 {
-	write(2, file_name, ft_strlen(prog_name));
+	write(2, prog_name, ft_strlen(prog_name));
 	write(2, ": ", 2);
 	write(2, file_name, ft_strlen(file_name));
 	write(2, ": ", 2);
@@ -52,12 +50,11 @@ int	main(int argc, char **argv)
 	int		fd;
 	char	*prog_name;
 	int		i;
+	int		ret_code;
 
 	prog_name = basename(argv[0]);
 	if (argc == 1)
-	{
-		ft_display_file(1);
-	}
+		ret_code = ft_display_file(1);
 	else
 	{
 		i = 1;
@@ -66,12 +63,11 @@ int	main(int argc, char **argv)
 			fd = open(argv[i], O_RDONLY);
 			if (fd < 0)
 			{
-				print_error(prog_name, argv[i]);
+				print_error(prog_name, argv[i++]);
 				return (errno);
 			}
-			ft_display_file(fd);
+			ret_code = ft_display_file(fd);
 		}
-		i++;
 	}
-	return (errno);
+	return (ret_code);
 }
