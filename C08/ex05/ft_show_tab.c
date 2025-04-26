@@ -15,7 +15,7 @@ static void	put_nbr(int nbr)
 	}
 	if (nbr >= 10)
 		put_nbr(nbr / 10);
-	write(1, (char []){nbr + '0'}, 1);
+	write(1, (char[]){nbr + '0'}, 1);
 }
 
 void	ft_show_tab(struct s_stock_str *par)
