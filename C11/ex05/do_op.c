@@ -9,22 +9,24 @@ int	parse_int(char *str)
 {
 	int	nbr;
 	int	sign;
+	int	i;
 
+	i = 0;
 	nbr = 0;
 	sign = 1;
-	while (*str == ' ')
-		str++;
-	while (*str == '-' || *str == '+')
+	while (str[i] == ' ')
+		i++;
+	while (str[i] == '-' || str[i] == '+')
 	{
-		if (*str == '-')
+		if (str[i] == '-')
 			sign *= -1;
-		str++;
+		i++;
 	}
-	while (*str && (*str >= '0' && *str <= '9'))
+	while (str[i] && (str[i] >= '0' && str[i] <= '9'))
 	{
 		nbr *= 10;
-		nbr += (*str - '0');
-		str++;
+		nbr += (str[i] - '0');
+		i++;
 	}
 	return (sign * nbr);
 }
@@ -76,10 +78,16 @@ int	is_valid(char **argv)
 	if (parse_int(argv[3]) == 0)
 	{
 		if (argv[2][0] == '/')
+		{
 			print_str("Stop : division by zero");
+			return (0);
+		}
 		else if (argv[2][0] == '%')
+		{
 			print_str("Stop : modulo by zero");
-		return (0);
+			return (0);
+		}
+		return (1);
 	}
 	return (1);
 }
