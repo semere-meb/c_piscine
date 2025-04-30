@@ -1,10 +1,5 @@
 #include <unistd.h>
 
-int	do_op(int a, int b, int (*f)(int, int))
-{
-	return (f(a, b));
-}
-
 int	parse_int(char *str)
 {
 	int	nbr;
@@ -90,46 +85,4 @@ int	is_valid(char **argv)
 		return (1);
 	}
 	return (1);
-}
-
-static inline int	add(int a, int b)
-{
-	return (a + b);
-}
-static inline int	multiply(int a, int b)
-{
-	return (a * b);
-}
-static inline int	subtract(int a, int b)
-{
-	return (a - b);
-}
-static inline int	divide(int a, int b)
-{
-	return (a / b);
-}
-static inline int	modulo(int a, int b)
-{
-	return (a % b);
-}
-
-int	main(int argc, char **argv)
-{
-	int	res;
-	int	a;
-	int	b;
-	int	op;
-
-	int (*ops[5])(int, int) = {add, multiply, subtract, divide, modulo};
-	if (argc == 4)
-	{
-		res = 0;
-		a = parse_int(argv[1]);
-		b = parse_int(argv[3]);
-		op = get_op(argv[2]);
-		if (is_valid(argv) && op != -1)
-			res = do_op(a, b, ops[op]);
-		print_nbr(res);
-		write(1, "\n", 1);
-	}
 }
