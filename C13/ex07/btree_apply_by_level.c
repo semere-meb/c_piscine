@@ -1,26 +1,19 @@
 #include "ft_btree.h"
 #include <stdlib.h>
 
-typedef struct s_queue
-{
-	t_btree			*node;
-	int				level;
-	struct s_queue	*next;
-}					t_queue;
-
-void	enqueue(t_queue **queue, t_btree *node, int level)
+static void	enqueue(t_queue **queue, t_btree *node, int level)
 {
 	t_queue	*new;
 	t_queue	*tmp;
 
 	new = malloc(sizeof(t_queue));
+	if (!new)
+		return ;
 	new->node = node;
 	new->level = level;
 	new->next = NULL;
 	if (!*queue)
-	{
 		*queue = new;
-	}
 	else
 	{
 		tmp = *queue;
@@ -30,7 +23,7 @@ void	enqueue(t_queue **queue, t_btree *node, int level)
 	}
 }
 
-t_queue	*dequeue(t_queue **queue)
+static t_queue	*dequeue(t_queue **queue)
 {
 	t_queue	*front;
 
@@ -45,9 +38,9 @@ void	btree_apply_by_level(t_btree *root, void (*applyf)(void *item,
 			int current_level, int is_first_elem))
 {
 	t_queue	*queue;
+	t_queue	*curr;
 	int		current_level;
 	int		is_first_elem;
-	t_queue	*curr;
 
 	if (!root)
 		return ;
@@ -59,10 +52,8 @@ void	btree_apply_by_level(t_btree *root, void (*applyf)(void *item,
 	{
 		curr = dequeue(&queue);
 		if (curr->level != current_level)
-		{
-			current_level = curr->level;
 			is_first_elem = 1;
-		}
+		current_level = curr->level;
 		applyf(curr->node->item, curr->level, is_first_elem);
 		is_first_elem = 0;
 		if (curr->node->left)
