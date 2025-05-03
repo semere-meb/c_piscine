@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_sorted_list_merge.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: smebraht <smebraht@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/03 17:53:07 by smebraht          #+#    #+#             */
+/*   Updated: 2025/05/03 17:53:07 by smebraht         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_list.h"
 
 void	ft_sorted_list_merge(t_list **begin_list1, t_list *begin_list2,
@@ -5,6 +17,7 @@ void	ft_sorted_list_merge(t_list **begin_list1, t_list *begin_list2,
 {
 	t_list	*current;
 	t_list	*prev;
+	t_list	*next_b2;
 
 	if (!*begin_list1)
 	{
@@ -17,7 +30,7 @@ void	ft_sorted_list_merge(t_list **begin_list1, t_list *begin_list2,
 	{
 		if ((*cmp)(current->data, begin_list2->data) > 0)
 		{
-			t_list *next_b2 = begin_list2->next;
+			next_b2 = begin_list2->next;
 			if (prev)
 				prev->next = begin_list2;
 			else
@@ -31,7 +44,6 @@ void	ft_sorted_list_merge(t_list **begin_list1, t_list *begin_list2,
 			prev = current;
 			current = current->next;
 		}
-
 	}
 	if (begin_list2)
 		prev->next = begin_list2;
