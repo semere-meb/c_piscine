@@ -1,4 +1,6 @@
-42 C Piscine
+## 42 C Piscine ##
+
+My Rewrite of the 42 piscine I took part in Nov 2024 in 42 AbuDhabi.
 
 ### Files currently known to have errors (as tested by minimoulinette)
 C00/ex08/ft_print_combn.c
