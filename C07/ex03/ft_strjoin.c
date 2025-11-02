@@ -12,14 +12,13 @@
 
 #include <stdlib.h>
 
-int	ft_strlen(char *str)
-{
-	int	i;
+unsigned int ft_strlen(char *str) {
+	unsigned int len = 0;
 
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
+	while (str[len])
+		len++;
+
+	return len;
 }
 
 int	compute_space(int size, char **strs, char *sep)

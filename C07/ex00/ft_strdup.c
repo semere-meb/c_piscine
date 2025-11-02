@@ -12,18 +12,24 @@
 
 #include <stdlib.h>
 
+unsigned int ft_strlen(char *str) {
+	unsigned int len = 0;
+
+	while (str[len])
+		len++;
+
+	return len;
+}
+
 char	*ft_strdup(char *src)
 {
 	int		i;
 	char	*dup;
 
 	i = 0;
-	while (src[i])
-		i++;
-	dup = malloc(i + 1);
+	dup = malloc(ft_strlen(src) + 1);
 	if (!dup)
 		return (NULL);
-	i = 0;
 	while (src[i])
 	{
 		dup[i] = src[i];
