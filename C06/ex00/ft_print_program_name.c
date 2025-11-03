@@ -12,19 +12,15 @@
 
 #include <unistd.h>
 
-void	write_ln(char *str)
+void	ft_putstr(char *str)
 {
 	while (*str)
-	{
-		write(1, str, 1);
-		str++;
-	}
-	write(1, "\n", 1);
+		write(1, str++, 1);
 }
 
 int	main(int count, char **args)
 {
 	(void)count;
-	write_ln(args[0]);
-	return (0);
+	ft_putstr(args[0]);
+	write(1, "\n", 1);
 }

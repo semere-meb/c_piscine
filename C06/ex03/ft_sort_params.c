@@ -14,21 +14,12 @@
 
 int	ft_strcmp(char *s1, char *s2)
 {
-	unsigned int	i;
+	int	i;
 
 	i = 0;
-	while (*s1 && *s2)
-	{
-		if (*s1 == *s2)
-		{
-			s1++;
-			s2++;
-			i++;
-		}
-		else
-			return (*s1 - *s2);
-	}
-	return (*s1 - *s2);
+	while (s1[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }
 
 void	sort_args(char **argv, int count)
@@ -37,7 +28,7 @@ void	sort_args(char **argv, int count)
 	int		j;
 	char	*temp;
 
-	i = 1;
+	i = 0;
 	while (i < count - 1)
 	{
 		j = i + 1;
@@ -55,14 +46,10 @@ void	sort_args(char **argv, int count)
 	}
 }
 
-void	write_ln(char *str)
+void	ft_putstr(char *str)
 {
 	while (*str)
-	{
-		write(1, str, 1);
-		str++;
-	}
-	write(1, "\n", 1);
+		write(1, str++, 1);
 }
 
 void	print_args(char **args, int count)
@@ -72,8 +59,8 @@ void	print_args(char **args, int count)
 	index = 1;
 	while (index < count)
 	{
-		write_ln(args[index]);
-		index++;
+		ft_putstr(args[index++]);
+		write(1, "\n", 1);
 	}
 }
 
@@ -81,7 +68,7 @@ int	main(int argc, char **argv)
 {
 	if (argc > 0)
 	{
-		sort_args(argv, argc);
+		sort_args(&argv[1], argc - 1);
 		print_args(argv, argc);
 	}
 }

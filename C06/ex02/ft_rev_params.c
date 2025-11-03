@@ -12,14 +12,10 @@
 
 #include <unistd.h>
 
-void	write_ln(char *str)
+void	ft_putstr(char *str)
 {
 	while (*str)
-	{
-		write(1, str, 1);
-		str++;
-	}
-	write(1, "\n", 1);
+		write(1, str++, 1);
 }
 
 int	main(int count, char **args)
@@ -31,9 +27,8 @@ int	main(int count, char **args)
 	{
 		while (index > 0)
 		{
-			write_ln(args[index]);
-			index--;
+			ft_putstr(args[index--]);
+			write(1, "\n", 1);
 		}
 	}
-	return (0);
 }
