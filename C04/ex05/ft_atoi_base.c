@@ -3,27 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi_base.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smebraht <smebraht@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*   By: semebrah <semebrah@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 17:52:40 by smebraht          #+#    #+#             */
-/*   Updated: 2025/05/03 17:52:40 by smebraht         ###   ########.fr       */
+/*   Created: 2025/10/23 02:24:34 by semebrah          #+#    #+#             */
+/*   Updated: 2025/10/23 02:25:31 by semebrah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
-int	base_len(char *base)
+int	ft_strlen(char *str)
 {
-	int	i;
-	int	j;
+	unsigned int	len;
+
+	len = 0;
+	while (str[len])
+		len++;
+	return (len);
+}
+
+int	is_base_valid(char *base)
+{
+	unsigned int	i;
+	unsigned int	j;
+	unsigned int	len;
 
 	i = 0;
-	while (base[i])
+	len = ft_strlen(base);
+	if (len < 2)
+		return (0);
+	while (i < len)
 	{
-		if (base[i] == '-' || base[i] == '+')
+		if (base[i] == '+' || base[i] == '-')
 			return (0);
-		j = i + 1;
-		while (base[j])
+		j = 0;
+		while (j < i)
 		{
 			if (base[i] == base[j])
 				return (0);
@@ -31,19 +45,12 @@ int	base_len(char *base)
 		}
 		i++;
 	}
-	if (i < 2)
-		return (0);
-	return (i);
+	return (1);
 }
 
-int	is_space(char c)
+int	get_index_in_base(char c, char *base)
 {
-	return ((c >= 9 && c <= 13) || c == 32);
-}
-
-int	base_index(char c, char *base)
-{
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	while (base[i])
@@ -57,26 +64,42 @@ int	base_index(char c, char *base)
 
 int	ft_atoi_base(char *str, char *base)
 {
-	int	ret;
-	int	mul;
-	int	len;
+	int	number;
+	int	sign;
+	int	i;
+	int	base_len;
 
-	ret = 0;
-	mul = 1;
-	len = base_len(base);
-	while (is_space(*str))
-		str++;
-	while (*str == '+' || *str == '-')
+	number = 0;
+	sign = 1;
+	i = 0;
+	base_len = ft_strlen(base);
+	if (!is_base_valid(base))
+		return (0);
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	while (str[i] == '+' || str[i] == '-')
 	{
-		if (*str == '-')
-			mul *= -1;
-		str++;
+		if (str[i] == '-')
+			sign *= -1;
+		i++;
 	}
-	while (base_index(*str, base) >= 0)
+	while (get_index_in_base(str[i], base) >= 0)
 	{
-		ret *= len;
-		ret += base_index(*str, base);
-		str++;
+		number = number * base_len + get_index_in_base(str[i], base);
+		i++;
 	}
-	return (ret * mul);
+	return (number * sign);
 }
+
+/*
+#include <stdio.h>
+
+int	main(void) {
+	printf("%d\n", ft_atoi_base("-2147483648", "0123456789"));
+	printf("%d\n", ft_atoi_base("-10000000000000000000000000000000", "01"));
+	printf("%d\n", ft_atoi_base("  -20000000000", "01234567"));
+	printf("%d\n", ft_atoi_base("-80000000", "0123456789ABCDEF"));
+	printf("%d\n", ft_atoi_base("-npppppppppp", "poneyvif"));
+	printf("%d\n", ft_atoi_base("  \t\n\r+++---npppppppppp", "poneyvif"));
+}
+*/

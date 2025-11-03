@@ -3,119 +3,85 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ten_queens_puzzle.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smebraht <smebraht@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*   By: semebrah <semebrah@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 17:52:42 by smebraht          #+#    #+#             */
-/*   Updated: 2025/05/03 17:52:42 by smebraht         ###   ########.fr       */
+/*   Created: 2025/10/25 19:42:38 by semebrah          #+#    #+#             */
+/*   Updated: 2025/10/25 19:44:17 by semebrah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
-}
-
-void	ft_print_solution(char table[10][10])
-{
-	int	row;
-	int	col;
-	int	found;
-
-	row = 0;
-	while (row < 10)
-	{
-		col = 0;
-		found = 0;
-		while (col < 10)
-		{
-			if (table[row][col] == '1' && found == 0)
-			{
-				ft_putchar(col + '0');
-				found = 1;
-			}
-			col++;
-		}
-		row++;
-	}
-	ft_putchar('\n');
-}
-
-int	is_safe(char table[10][10], int h, int v)
+void	print_solution(int *board)
 {
 	int	i;
-	int	j;
 
-	i = h - 1;
-	while (i >= 0)
+	i = 0;
+	while (i < 10)
+		write(1, (char []){'0' + board[i++]}, 1);
+	write(1, "\n", 1);
+}
+
+int	is_safe(int *board, int row, int col)
+{
+	int	i;
+
+	i = 0;
+	while (i < row)
 	{
-		if (table[i][v] == '1')
+		if (board[i] == col)
 			return (0);
-		i--;
-	}
-	i = h - 1;
-	j = v - 1;
-	while (i >= 0 && j >= 0)
-	{
-		if (table[i][j] == '1')
+		if (board[i] - i == col - row || board[i] + i == col + row)
 			return (0);
-		i--;
-		j--;
-	}
-	i = h - 1;
-	j = v + 1;
-	while (i >= 0 && j < 10)
-	{
-		if (table[i][j] == '1')
-			return (0);
-		i--;
-		j++;
+		i++;
 	}
 	return (1);
 }
 
-void	solve(char table[10][10], int row, int *count)
+void	solve(int *board, int row, int *count)
 {
 	int	col;
 
+	if (row == 10)
+	{
+		print_solution(board);
+		(*count)++;
+		return ;
+	}
 	col = 0;
 	while (col < 10)
 	{
-		if (is_safe(table, row, col))
+		if (is_safe(board, row, col))
 		{
-			table[row][col] = '1';
-			solve(table, row + 1, count);
-			table[row][col] = '0';
+			board[row] = col;
+			solve(board, row + 1, count);
 		}
 		col++;
-	}
-	if (row == 10)
-	{
-		ft_print_solution(table);
-		(*count)++;
 	}
 }
 
 int	ft_ten_queens_puzzle(void)
 {
-	char	table[10][10];
-	int		i;
-	int		j;
-	int		count;
+	int	board[10];
+	int	count;
+	int	i;
 
-	i = 0;
 	count = 0;
+	i = 0;
 	while (i < 10)
 	{
-		j = 0;
-		while (j < 10)
-		{
-			table[i][j] = '0';
-			j++;
-		}
+		board[i] = 0;
 		i++;
 	}
-	solve(table, 0, &count);
+	solve(board, 0, &count);
 	return (count);
 }
+
+/*
+#include <stdio.h>
+
+int	main(void)
+{
+	printf("\n%d solutions\n", ft_ten_queens_puzzle());
+}
+*/

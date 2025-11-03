@@ -3,39 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smebraht <smebraht@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*   By: semebrah <semebrah@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 17:52:40 by smebraht          #+#    #+#             */
-/*   Updated: 2025/05/03 17:52:40 by smebraht         ###   ########.fr       */
+/*   Created: 2025/10/23 18:26:50 by semebrah          #+#    #+#             */
+/*   Updated: 2025/10/23 18:26:50 by semebrah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	is_space(char c)
-{
-	if ((c >= 9 && c <= 13) || c == 32)
-		return (1);
-	return (0);
-}
-
 int	ft_atoi(char *str)
 {
-	int	ret;
-	int	mul;
+	int				num;
+	int				sign;
+	unsigned int	i;
 
-	ret = 0;
-	mul = 1;
-	while (is_space(*str))
-		str++;
-	while (*str == '+' || *str == '-')
+	num = 0;
+	sign = 1;
+	i = 0;
+	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
+		i++;
+	while (str[i] == '+' || str[i] == '-')
 	{
-		if (*str == '-')
-			mul *= -1;
-		str++;
+		if (str[i] == '-')
+			sign *= -1;
+		i++;
 	}
-	while (*str >= '0' && *str <= '9')
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		ret = ret * 10 + (*str - '0');
-		str++;
+		num = num * 10 + str[i] - '0';
+		i++;
 	}
-	return (ret * mul);
+	return (num * sign);
 }
+
+/*
+#include <stdio.h>
+#include <stdlib.h>
+
+int	main(void) {
+	char *tests[] = {
+		"12342",
+		"    +-+---12342",
+		"		\r\t\n +12342kk",
+		"-2147483648hey",
+		"2147483647hekhkdf",
+		// "2147483648",
+	};
+
+	int i = 0;
+
+	printf("TESTING ft_atoi\n\n");
+
+	while (i < 5){
+		printf("str:%-25s\tatoi:%-15d\tft_atoi:%-15d\tsame:%s\n", tests[i],
+			atoi(tests[i]), ft_atoi(tests[i]),
+			(atoi(tests[i]) == ft_atoi(tests[i])) ? "PASS" : "FAIL" );
+		i++;
+	}
+}
+*/

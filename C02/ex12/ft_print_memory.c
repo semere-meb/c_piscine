@@ -3,133 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_memory.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smebraht <smebraht@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*   By: semebrah <semebrah@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 17:52:38 by smebraht          #+#    #+#             */
-/*   Updated: 2025/05/03 17:52:38 by smebraht         ###   ########.fr       */
+/*   Created: 2025/10/19 11:18:06 by semebrah          #+#    #+#             */
+/*   Updated: 2025/10/19 11:22:23 by semebrah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
-int	is_char_non_printable(char str)
+void	ft_print_hex(unsigned long val, int digit)
 {
-	if ((unsigned char)str <= 31 || (unsigned char)str == 127)
-	{
-		return (1);
-	}
-	else
-	{
-		return (0);
-	}
+	char	*hex;
+
+	hex = "0123456789abcdef";
+	if (digit > 1)
+		ft_print_hex(val / 16, digit - 1);
+	write(1, &hex[val % 16], 1);
 }
 
-void	print_segment(char *str, int size, int as_hex)
+void	print_bytes_as_hex(char *str, unsigned int len)
 {
-	int				i;
-	char			*template;
-	unsigned char	current_byte;
+	unsigned int	i;
 
 	i = 0;
-	template = "0123456789abcdef";
-	while (i < size)
+	while (i < 16)
 	{
-		if (as_hex)
-		{
-			current_byte = (unsigned char)str[i];
-			write(1, &template[current_byte / 16], 1);
-			write(1, &template[current_byte % 16], 1);
-		}
+		if (i < len)
+			ft_print_hex(str[i], 2);
 		else
-		{
-			if (is_char_non_printable(str[i]))
-			{
-				write(1, ".", 1);
-			}
-			else
-			{
-				write(1, &str[i], 1);
-			}
-		}
+			write(1, "  ", 2);
+		if (i % 2)
+			write(1, " ", 1);
 		i++;
 	}
 }
 
-void	print_address(unsigned long addr)
+void	print_bytes_as_ascii(char *str, unsigned int len)
 {
-	char	chars[16];
-	char	*template;
-	int		i;
+	unsigned int	i;
 
-	template = "0123456789abcdef";
-	for (i = 0; i < 16; i++)
+	i = 0;
+	while (i < len)
 	{
-		chars[i] = '0';
+		if (str[i] >= 32 && str[i] <= 126)
+			write(1, &str[i], 1);
+		else
+			write(1, ".", 1);
+		i++;
 	}
-	i = 15;
-	while (addr > 0 && i >= 0)
-	{
-		chars[i] = template[addr % 16];
-		addr /= 16;
-		i--;
-	}
-	write(1, chars, 16);
 }
 
 void	*ft_print_memory(void *addr, unsigned int size)
 {
-	unsigned int	i;
-	unsigned int	line_bytes;
-	char			*current_line_addr;
-	unsigned int	bytes_this_line;
-	unsigned int	j;
+	unsigned long	i;
+	unsigned int	len;
+	char			*str;
 
 	i = 0;
-	line_bytes = 16;
-	if (size == 0)
-	{
-		return (addr);
-	}
+	str = (char *)addr;
 	while (i < size)
 	{
-		current_line_addr = (char *)addr + i;
-		if (i + line_bytes > size)
-		{
-			bytes_this_line = size - i;
-		}
+		if (size - i >= 16)
+			len = 16;
 		else
-		{
-			bytes_this_line = line_bytes;
-		}
-		print_address((unsigned long)current_line_addr);
+			len = size - i;
+		ft_print_hex((unsigned long)&str[i], 16);
 		write(1, ": ", 2);
-		j = 0;
-		while (j < bytes_this_line)
-		{
-			print_segment(current_line_addr + j, 1, 1);
-			write(1, " ", 1);
-			if (j == 7)
-			{
-				write(1, " ", 1);
-			}
-			j++;
-		}
-		while (j < line_bytes)
-		{
-			write(1, "  ", 2);
-			write(1, " ", 1);
-			if (j == 7)
-			{
-				write(1, " ", 1);
-			}
-			j++;
-		}
-		print_segment(current_line_addr, bytes_this_line, 0);
-		i += bytes_this_line;
-		if (i < size)
-		{
-			write(1, "\n", 1);
-		}
+		print_bytes_as_hex(&str[i], len);
+		print_bytes_as_ascii(&str[i], len);
+		write(1, "\n", 1);
+		i += 16;
 	}
 	return (addr);
 }
+
+/*
+int	main(void)
+{
+	char	str[120] =  "Lorem ipsum dolor sit amet,
+			consectetur adipiscing elit. Aliquam eu turpis massa. Pellentesque";
+
+	ft_print_memory(str, 100);
+}
+*/
