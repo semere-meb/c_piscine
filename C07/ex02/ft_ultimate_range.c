@@ -20,7 +20,7 @@ int	ft_ultimate_range(int **range, int min, int max)
 	if (max <= min)
 	{
 		*range = NULL;
-		return (0);
+		return (-1);
 	}
 	*range = malloc(sizeof(int) * (max - min));
 	if (!(*range))

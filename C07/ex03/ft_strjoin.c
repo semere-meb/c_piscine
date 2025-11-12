@@ -12,9 +12,9 @@
 
 #include <stdlib.h>
 
-unsigned int	ft_strlen(char *str)
+unsigned long	str_len(char *str)
 {
-	unsigned int	len;
+	unsigned long	len;
 
 	len = 0;
 	while (str[len])
@@ -22,55 +22,49 @@ unsigned int	ft_strlen(char *str)
 	return (len);
 }
 
-int	compute_space(int size, char **strs, char *sep)
+void	populate_string(char *str, int size, char **strs, char *sep)
 {
-	int	count;
-	int	i;
-	int	sep_count;
+	int	strs_i;
+	int	word_i;
+	int	str_i;
+	int	sep_i;
 
-	count = 0;
-	i = 0;
-	sep_count = ft_strlen(sep);
-	while (i < size)
-		count += ft_strlen(strs[i++]);
-	return (count + ((i - 1) * sep_count) + 1);
-}
-
-void	populate(int size, char **strs, char *sep, char *result)
-{
-	int	i;
-	int	j;
-	int	k;
-	int	l;
-
-	i = 0;
-	k = 0;
-	while (i < size)
+	strs_i = 0;
+	str_i = 0;
+	while (strs_i < size)
 	{
-		j = 0;
-		while (strs[i][j])
-			result[k++] = strs[i][j++];
-		l = 0;
-		while (i < (size - 1) && sep[l])
-			result[k++] = sep[l++];
-		i++;
+		word_i = 0;
+		while (strs[strs_i][word_i])
+			str[str_i++] = strs[strs_i][word_i++];
+		if (strs_i < size - 1)
+		{
+			sep_i = 0;
+			while (sep[sep_i])
+				str[str_i++] = sep[sep_i++];
+		}
+		strs_i++;
 	}
-	result[k] = '\0';
+	str[str_i] = '\0';
 }
 
 char	*ft_strjoin(int size, char **strs, char *sep)
 {
-	char	*result;
+	int				i;
+	unsigned long	length;
+	char			*res;
 
-	if (size == 0)
-	{
-		result = malloc(1);
-		if (result)
-			result[0] = '\0';
-		return (result);
-	}
-	result = malloc(compute_space(size, strs, sep));
-	if (result)
-		populate(size, strs, sep, result);
-	return (result);
+	i = 0;
+	length = 0;
+	while (i < size)
+		length += str_len(strs[i++]);
+	res = (char *)malloc(length + (size - 1) * str_len(sep) + 1);
+	populate_string(res, size, strs, sep);
+	return (res);
 }
+
+/*
+#include <stdio.h>
+int main(int argc, char **argv) {
+	printf("%s\n", ft_strjoin(argc-2, &argv[2], argv[1]));
+}
+*/
