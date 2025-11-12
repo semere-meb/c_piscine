@@ -13,15 +13,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-void	ft_print_str(char *str, int size)
-{
-	int	i;
-
-	i = 0;
-	while (i < size)
-		write(1, &str[i++], 1);
-}
-
 int	ft_display_file(char *file_name)
 {
 	char	buf[10];
@@ -35,7 +26,7 @@ int	ft_display_file(char *file_name)
 	while (size > 0)
 	{
 		size = read(fd, buf, 10);
-		ft_print_str(buf, size);
+		write(1, buf, size);
 	}
 	return (size);
 }
