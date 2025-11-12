@@ -25,7 +25,7 @@ static void	put_nbr(int nbr)
 		write(1, "-", 1);
 		nbr = -nbr;
 	}
-	if (nbr >= 10)
+	if (nbr > 9)
 		put_nbr(nbr / 10);
 	write(1, (char[]){nbr + '0'}, 1);
 }
